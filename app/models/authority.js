@@ -2,8 +2,8 @@ import Model from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
 
 export default class Authority extends Model {
-  @tracked title;
-  @tracked pickOrder;
+  @attr('string') title;
+  @attr('number') pickOrder;
 
 
   constructor({ id, title,pickOrder }) {

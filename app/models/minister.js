@@ -2,8 +2,8 @@ import Model from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
 
 export default class Minister extends Model {
-  @tracked firstName;
-  @tracked lastName;
+  @attr('string') firstName;
+  @attr('string') lastName;
   @tracked authorities;
 
   constructor({ id, firstName, lastName, authorities }, relationships = {}) {
@@ -13,5 +13,9 @@ export default class Minister extends Model {
     this.lastName = lastName;
     this.authorities = authorities || [];
     this.relationships = relationships;
+  }
+
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`;
   }
 }
