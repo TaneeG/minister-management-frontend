@@ -1,13 +1,7 @@
 {{#if this.governments.length}}
-{{#each this.governments as |government|}}
-  <a class="card">
-    <div class="container">
-      <h4><strong> {{government.startDate}} - {{government.endDate}}  </strong>
-        {{government.name}} </h4>
-      <p>TODO MINISTERS</p>
-    </div>
-  </a>
-{{/each}}
+  {{#each this.governments key="id" as |government|}}
+    <GovernmentCard @government="{{government}}"></GovernmentCard>
+  {{/each}}
 {{else}}
   <BsAlert
           @visible={{true}}

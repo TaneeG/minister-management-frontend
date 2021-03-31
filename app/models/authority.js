@@ -1,15 +1,9 @@
-import Model from '@ember-data/model';
-import { tracked } from '@glimmer/tracking';
+import Model, { hasMany }  from '@ember-data/model';
 
-export default class Authority extends Model {
+
+export default class AuthorityModel extends Model {
   @attr('string') title;
   @attr('number') pickOrder;
+  @hasMany('minister') ministers;
 
-
-  constructor({ id, title,pickOrder }) {
-    super();
-    this.id = id;
-    this.title = title;
-    this.pickOrder = pickOrder;
-  }
 }

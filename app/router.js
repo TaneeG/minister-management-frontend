@@ -7,7 +7,10 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
-  this.route('governments');
+  this.route('governments', function() {
+    this.route('government');
+    this.route('new');
+  });
   this.route('ministers');
   this.route('authorities');
 });

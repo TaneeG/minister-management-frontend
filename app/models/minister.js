@@ -1,19 +1,10 @@
-import Model from '@ember-data/model';
-import { tracked } from '@glimmer/tracking';
+import Model, { belongsTo , hasMany } from '@ember-data/model';
 
-export default class Minister extends Model {
+export default class MinisterModel extends Model {
   @attr('string') firstName;
   @attr('string') lastName;
-  @tracked authorities;
-
-  constructor({ id, firstName, lastName, authorities }, relationships = {}) {
-    super();
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.authorities = authorities || [];
-    this.relationships = relationships;
-  }
+  @hasMany('authority') authorities;
+  @hasMany('government') governments;
 
   get fullName() {
     return `${this.firstName} ${this.lastName}`;

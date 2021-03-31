@@ -1,15 +1,6 @@
 import Service from '@ember/service';
 import { tracked } from 'tracked-built-ins';
 
-function extractRelationships(object) {
-  let relationships = {};
-  for (let relationshipName in object) {
-    relationships[relationshipName] =
-      object[relationshipName].links.related;
-  }
-  return relationships;
-}
-
 export default class ListingService extends Service {
   storage ={};
 
