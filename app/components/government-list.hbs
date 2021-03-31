@@ -1,0 +1,23 @@
+{{#if this.governments.length}}
+{{#each this.governments as |government|}}
+  <a class="card">
+    <div class="container">
+      <h4><strong> {{government.startDate}} - {{government.endDate}}  </strong>
+        {{government.name}} </h4>
+      <p>TODO MINISTERS</p>
+    </div>
+  </a>
+{{/each}}
+{{else}}
+  <BsAlert
+          @visible={{true}}
+          @fade={{true}}
+          @type="info"
+          @dismissible={{true}}
+  >
+    Geen vlaamse regering teruggevonden.
+  </BsAlert>
+{{/if}}
+
+
+

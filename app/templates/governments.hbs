@@ -1,2 +1,7 @@
 {{page-title "Governments"}}
+
+<LinkTo @route="governments.new">
+  Add Government
+</LinkTo>
+<GovernmentList @governments={{@model}} />
 {{outlet}}
