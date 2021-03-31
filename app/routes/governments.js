@@ -4,9 +4,9 @@ import { inject as service } from '@ember/service';
 import fetch from 'fetch';
 
 export default class GovernmentsRoute extends Route {
-  @service catalog;
+  @service listing;
 
-  model() {
-    return [];
+  async model() {
+    return this.listing.fetchAll('gov');
   }
 }

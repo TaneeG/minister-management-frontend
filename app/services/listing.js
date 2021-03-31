@@ -1,5 +1,17 @@
 import Service from '@ember/service';
 import { tracked } from 'tracked-built-ins';
+import GovernmentModel from "../models/government";
+import MinisterModel from "../models/minister";
+import AuthorityModel from "../models/authority";
+
+function extractRelationships(object) {
+  let relationships = {};
+  for (let relationshipName in object) {
+    relationships[relationshipName] =
+      object[relationshipName].links.related;
+  }
+  return relationships;
+}
 
 export default class ListingService extends Service {
   storage ={};
@@ -11,14 +23,24 @@ export default class ListingService extends Service {
     this.storage.authorities = tracked([]);
   }
 
-  fetchAll(type) {
+  async fetchAll(type) {
     if (type === 'gov'){
-      return this.storage.governments
+      let response = await fetch('/governments');
+      let json = await response.json();
+      this.loadAll(json);
+      return this.governments;
     } else if (type === 'minister'){
-      return this.storage.ministers
+      let response = await fetch('/ministers');
+      let json = await response.json();
+      this.loadAll(json);
+      return this.ministers;
     }else{
-      return this.storage.authorities
+      let response = await fetch('/authorities');
+      let json = await response.json();
+      this.loadAll(json);
+      return this.authorities;
     }
+
   }
 
   find(type, filterFn) {
@@ -42,5 +64,71 @@ export default class ListingService extends Service {
       collection = this.storage.authorities
     }
     collection.push(record);
+  }
+
+  loadAll(json) {
+    let records = [];
+    for (let item of json.data) {
+      records.push(this._loadResource(item));
+    }
+    return records;
+  }
+
+  _loadResource(data) {
+    let record;
+    let { id, type, attributes, relationships } = data;
+    if (type === 'gov') {
+      let rels = extractRelationships(relationships);
+      record = new GovernmentModel({ id, ...attributes }, rels);
+      this.add('gov', record);
+    }
+    else if (type === 'minister') {
+      let rels = extractRelationships(relationships);
+      record = new MinisterModel({ id, ...attributes }, rels);
+      this.add('minister', record);
+    }
+    else if (type === 'authority') {
+      let rels = extractRelationships(relationships);
+      record = new AuthorityModel({ id, ...attributes }, rels);
+      this.add('authority', record);
+    }
+    return record;
+  }
+
+  load(response) {
+    return this._loadResource(response.data);
+  }
+  getpayloadType(type){
+    if (type === 'gov'){
+      return 'governments'
+    }
+    if (type === 'minister'){
+      return 'ministers'
+    }
+    if (type === 'authority'){
+      return 'authorities'
+    }
+  }
+
+
+  async create(type, attributes, relationships = {}) {
+
+    let payload = {
+      data: {
+        type:this.getpayloadType(type),
+        attributes,
+        relationships,
+      },
+    };
+    let response = await fetch('/'+this.getpayloadType(type),
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/vnd.api+json',
+        },
+        body: JSON.stringify(payload),
+      });
+    let json = await response.json();
+    return this.load(json);
   }
 }

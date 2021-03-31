@@ -1,2 +1,16 @@
-{{page-title "New"}}
-{{outlet}}
+<input type="text" placeholder="Naam" value={{this.name}}
+  {{on "input" this.updateName}}
+/>
+
+<input type="date" placeholder="Start regering" value={{this.startDate}}
+  {{on "input" this.updateStartDate}}
+/>
+<input type="date" placeholder="Einde regering" value={{this.endDate}}
+  {{on "input" this.updateEndDate}}
+/>
+<button type="button"{{on "click" this.save}}>
+  Opslaan
+</button>
+<button type="button"{{on "click" this.cancel}}>
+  Annuleer
+</button>
