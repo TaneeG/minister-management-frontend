@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import { tracked } from 'tracked-built-ins';
+import {tracked} from 'tracked-built-ins';
 import GovernmentModel from "../models/government";
 import MinisterModel from "../models/minister";
 import AuthorityModel from "../models/authority";
@@ -14,7 +14,7 @@ function extractRelationships(object) {
 }
 
 export default class ListingService extends Service {
-  storage ={};
+  storage = {};
 
   constructor() {
     super(...arguments);
@@ -24,17 +24,17 @@ export default class ListingService extends Service {
   }
 
   async fetchAll(type) {
-    if (type === 'gov'){
+    if (type === 'gov') {
       let response = await fetch('/governments');
       let json = await response.json();
       this.loadAll(json);
       return this.governments;
-    } else if (type === 'minister'){
+    } else if (type === 'minister') {
       let response = await fetch('/ministers');
       let json = await response.json();
       this.loadAll(json);
       return this.ministers;
-    }else{
+    } else {
       let response = await fetch('/authorities');
       let json = await response.json();
       this.loadAll(json);
@@ -45,25 +45,29 @@ export default class ListingService extends Service {
 
   find(type, filterFn) {
     let collection;
-      if (type === 'gov'){
-        collection = this.governments
-      } else if (type === 'minister'){
-        collection = this.ministers
-      }else{
-        collection = this.authorities
-      }
+    if (type === 'gov') {
+      collection = this.governments
+    } else if (type === 'minister') {
+      collection = this.ministers
+    } else {
+      collection = this.authorities
+    }
     return collection.find(filterFn);
   }
+
   add(type, record) {
     let collection;
-    if (type === 'gov'){
+    if (type === 'gov') {
       collection = this.storage.governments
-    } else if (type === 'minister'){
+    } else if (type === 'minister') {
       collection = this.storage.ministers
-    }else{
+    } else {
       collection = this.storage.authorities
     }
-    collection.push(record);
+    let recordIds = collection.map((record) => record.id);
+    if (!recordIds.includes(record.id)) {
+      collection.push(record);
+    }
   }
 
   loadAll(json) {
@@ -76,36 +80,47 @@ export default class ListingService extends Service {
 
   _loadResource(data) {
     let record;
-    let { id, type, attributes, relationships } = data;
+    let {id, type, attributes, relationships} = data;
     if (type === 'gov') {
       let rels = extractRelationships(relationships);
-      record = new GovernmentModel({ id, ...attributes }, rels);
+      record = new GovernmentModel({id, ...attributes}, rels);
       this.add('gov', record);
-    }
-    else if (type === 'minister') {
+    } else if (type === 'minister') {
       let rels = extractRelationships(relationships);
-      record = new MinisterModel({ id, ...attributes }, rels);
+      record = new MinisterModel({id, ...attributes}, rels);
       this.add('minister', record);
-    }
-    else if (type === 'authority') {
+    } else if (type === 'authority') {
       let rels = extractRelationships(relationships);
-      record = new AuthorityModel({ id, ...attributes }, rels);
+      record = new AuthorityModel({id, ...attributes}, rels);
       this.add('authority', record);
     }
     return record;
   }
 
+  async fetchRelated(record, relationship) {
+    let url = record.relationships[relationship];
+    let response = await fetch(url);
+    let json = await response.json();
+    if (isArray(json.data)) {
+      record[relationship] = this.loadAll(json);
+    } else {
+      record[relationship] = this.load(json);
+    }
+    return record[relationship];
+  }
+
   load(response) {
     return this._loadResource(response.data);
   }
-  getpayloadType(type){
-    if (type === 'gov'){
+
+  getpayloadType(type) {
+    if (type === 'gov') {
       return 'governments'
     }
-    if (type === 'minister'){
+    if (type === 'minister') {
       return 'ministers'
     }
-    if (type === 'authority'){
+    if (type === 'authority') {
       return 'authorities'
     }
   }
@@ -115,12 +130,12 @@ export default class ListingService extends Service {
 
     let payload = {
       data: {
-        type:this.getpayloadType(type),
+        type: this.getpayloadType(type),
         attributes,
         relationships,
       },
     };
-    let response = await fetch('/'+this.getpayloadType(type),
+    let response = await fetch('/' + this.getpayloadType(type),
       {
         method: 'POST',
         headers: {
@@ -131,4 +146,24 @@ export default class ListingService extends Service {
     let json = await response.json();
     return this.load(json);
   }
+
+  async update(type, record, attributes) {
+    let payload = {
+      data: {
+        id: record.id,
+        type:this.getpayloadType(),
+        attributes,
+      },
+    };
+    let url = '/'+ this.getpayloadType() +'/${record.id}';
+    await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
+      body: JSON.stringify(payload),
+    });
+  }
+
+
 }
