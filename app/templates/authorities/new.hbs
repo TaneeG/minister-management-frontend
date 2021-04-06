@@ -1,20 +1,13 @@
 <form class="mt-5">
   <div class="row">
     <div class="col-6">
-      <input type="text" placeholder="Naam" value={{this.name}}
-        {{on "input" this.updateName}}
-      />
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-6">
-      <input type="date" placeholder="Start regering" value={{this.startDate}}
-        {{on "input" this.updateStartDate}}
+      <input type="text" placeholder="Titel" value={{this.title}}
+        {{on "input" this.updateTitle}}
       />
     </div>
     <div class="col-6">
-      <input type="date" placeholder="Einde regering" value={{this.endDate}}
-        {{on "input" this.updateEndDate}}
+      <input type="number" placeholder="rangorde" value={{this.pickOrder}}
+        {{on "input" this.updatePickOrder}}
       />
     </div>
   </div>

@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class GovernmentsNewController extends Controller {
-  @service listing;
   @service router;
 
   @tracked name;
@@ -25,11 +24,23 @@ export default class GovernmentsNewController extends Controller {
   }
 
   @action
-  async save() {
-    await this.listing.create('gov', {
+  async saveNew() {
+    let gov = this.store.createRecord('government', {
       name: this.name,
       startDate: this.startDate,
       endDate: this.endDate,
+    });
+    gov.save();
+    this.router.transitionTo('governments');
+  }
+
+  @action
+  async saveUpdate(index) {
+    this.store.findRecord('government', index).then(function(gov) {
+      gov.name = this.name;
+      gov.startDate = this.startDate;
+      gov.endDate = this.endDate;
+      gov.save(); // => PATCH to '/posts/1'
     });
     this.router.transitionTo('governments');
   }

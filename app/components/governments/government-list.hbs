@@ -1,10 +1,10 @@
 {{#if @governments.length}}
   {{#each @governments as |government|}}
     {{government}}
-    <a class="card" href="governments/government/{{@government.id}}">
+    <a class="card" href="governments/government/{{government.id}}">
       <div class="card-container">
-        <h4><strong> {{@government.startDate}} - {{@government.endDate}}  </strong>
-          {{@government.name}} </h4>
+        <h4><strong> {{government.startDate}} - {{government.endDate}}  </strong>
+          {{government.name}} </h4>
         <p>TODO MINISTERS</p>
       </div>
     </a>

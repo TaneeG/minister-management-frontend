@@ -1,2 +1,17 @@
 {{page-title "Ministers"}}
-{{outlet}}
+
+<div class="row">
+  <div class="col-6">
+    <Ministers::MinisterList @ministers="{{@model}}"></Ministers::MinisterList>
+  </div>
+  <div class="col-6">
+<!--    <div class="row">-->
+<!--      <LinkTo @route="ministers.new" class="btn btn-primary mt-2" role="button">-->
+<!--        Minister toevoegen-->
+<!--      </LinkTo>-->
+<!--    </div>-->
+    <div class="row">
+      {{outlet}}
+    </div>
+  </div>
+</div>

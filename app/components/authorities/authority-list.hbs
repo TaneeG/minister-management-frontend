@@ -1,0 +1,16 @@
+{{#if @authorities.length}}
+  {{#each @authorities as |authority|}}
+    <a class="card" href="authorities/authority/{{authority.id}}/ministers">
+      <div class="card-container">
+        <h4><strong> {{authority.title}}  </strong> {{authority.pickOrder}} </h4>
+      </div>
+    </a>
+  {{/each}}
+{{else}}
+  <div class="card warn" >
+    <div class="card-container">
+      <p> Geen bevoegdheden teruggevonden.</p>
+    </div>
+  </div>
+{{/if}}
+

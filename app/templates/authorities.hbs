@@ -1,4 +1,16 @@
-{{page-title "Authorities"}}
-
-
-{{outlet}}
+{{page-title "Bevoegdheden"}}
+<div class="row">
+  <div class="col-6">
+    <Authorities::AuthorityList @authorities="{{@model}}"></Authorities::AuthorityList>
+  </div>
+  <div class="col-6">
+    <div class="row">
+      <LinkTo @route="authorities.new" class="btn btn-primary mt-2" role="button">
+        Bevoegdheid toevoegen
+      </LinkTo>
+    </div>
+    <div class="row">
+      {{outlet}}
+    </div>
+  </div>
+</div>
