@@ -1,5 +1,6 @@
 {{page-title "Vlaamse regeringen"}}
 
+
 <BsNavbar
         @type="dark"
         @backgroundColor="primary"
@@ -8,7 +9,7 @@
         @onExpand={{action (mut collapsed) false}} as |navbar|>
   <div class="navbar-header">
     {{navbar.toggle}}
-    {{#link-to "governments" class="navbar-brand"}}Minister Management{{/link-to}}
+    <LinkTo @route="ministers" class="navbar-brand">Minister Management</LinkTo>
   </div>
   <navbar.content>
     <navbar.nav as |nav|>
@@ -24,8 +25,6 @@
     </navbar.nav>
   </navbar.content>
 </BsNavbar>
-
-<div class="layout-row flex">
-  {{outlet}}
+<div class="container">
+    {{outlet}}
 </div>
-

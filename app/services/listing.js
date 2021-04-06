@@ -1,14 +1,14 @@
 import Service from '@ember/service';
-import {tracked} from 'tracked-built-ins';
-import GovernmentModel from "../models/government";
-import MinisterModel from "../models/minister";
-import AuthorityModel from "../models/authority";
+import { tracked } from 'tracked-built-ins';
+import GovernmentModel from '../models/government';
+import MinisterModel from '../models/minister';
+import AuthorityModel from '../models/authority';
+import { isArray } from '@ember/array';
 
 function extractRelationships(object) {
   let relationships = {};
   for (let relationshipName in object) {
-    relationships[relationshipName] =
-      object[relationshipName].links.related;
+    relationships[relationshipName] = object[relationshipName].links.related;
   }
   return relationships;
 }
@@ -40,17 +40,16 @@ export default class ListingService extends Service {
       this.loadAll(json);
       return this.authorities;
     }
-
   }
 
   find(type, filterFn) {
     let collection;
     if (type === 'gov') {
-      collection = this.governments
+      collection = this.governments;
     } else if (type === 'minister') {
-      collection = this.ministers
+      collection = this.ministers;
     } else {
-      collection = this.authorities
+      collection = this.authorities;
     }
     return collection.find(filterFn);
   }
@@ -58,11 +57,11 @@ export default class ListingService extends Service {
   add(type, record) {
     let collection;
     if (type === 'gov') {
-      collection = this.storage.governments
+      collection = this.storage.governments;
     } else if (type === 'minister') {
-      collection = this.storage.ministers
+      collection = this.storage.ministers;
     } else {
-      collection = this.storage.authorities
+      collection = this.storage.authorities;
     }
     let recordIds = collection.map((record) => record.id);
     if (!recordIds.includes(record.id)) {
@@ -80,18 +79,18 @@ export default class ListingService extends Service {
 
   _loadResource(data) {
     let record;
-    let {id, type, attributes, relationships} = data;
+    let { id, type, attributes, relationships } = data;
     if (type === 'gov') {
       let rels = extractRelationships(relationships);
-      record = new GovernmentModel({id, ...attributes}, rels);
+      record = new GovernmentModel({ id, ...attributes }, rels);
       this.add('gov', record);
     } else if (type === 'minister') {
       let rels = extractRelationships(relationships);
-      record = new MinisterModel({id, ...attributes}, rels);
+      record = new MinisterModel({ id, ...attributes }, rels);
       this.add('minister', record);
     } else if (type === 'authority') {
       let rels = extractRelationships(relationships);
-      record = new AuthorityModel({id, ...attributes}, rels);
+      record = new AuthorityModel({ id, ...attributes }, rels);
       this.add('authority', record);
     }
     return record;
@@ -115,19 +114,17 @@ export default class ListingService extends Service {
 
   getpayloadType(type) {
     if (type === 'gov') {
-      return 'governments'
+      return 'governments';
     }
     if (type === 'minister') {
-      return 'ministers'
+      return 'ministers';
     }
     if (type === 'authority') {
-      return 'authorities'
+      return 'authorities';
     }
   }
 
-
   async create(type, attributes, relationships = {}) {
-
     let payload = {
       data: {
         type: this.getpayloadType(type),
@@ -135,14 +132,13 @@ export default class ListingService extends Service {
         relationships,
       },
     };
-    let response = await fetch('/' + this.getpayloadType(type),
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/vnd.api+json',
-        },
-        body: JSON.stringify(payload),
-      });
+    let response = await fetch('/' + this.getpayloadType(type), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
+      body: JSON.stringify(payload),
+    });
     let json = await response.json();
     return this.load(json);
   }
@@ -151,11 +147,11 @@ export default class ListingService extends Service {
     let payload = {
       data: {
         id: record.id,
-        type:this.getpayloadType(),
+        type: this.getpayloadType(),
         attributes,
       },
     };
-    let url = '/'+ this.getpayloadType() +'/${record.id}';
+    let url = '/' + this.getpayloadType() + '/' + record.id;
     await fetch(url, {
       method: 'PATCH',
       headers: {
@@ -165,5 +161,21 @@ export default class ListingService extends Service {
     });
   }
 
-
+  async delete(type, record, attributes) {
+    let payload = {
+      data: {
+        id: record.id,
+        type: this.getpayloadType(),
+        attributes,
+      },
+    };
+    let url = '/' + this.getpayloadType() + '/' + record.id;
+    await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
+      body: JSON.stringify(payload),
+    });
+  }
 }

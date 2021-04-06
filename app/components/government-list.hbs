@@ -1,16 +1,20 @@
-{{#if this.governments.length}}
-  {{#each this.governments key="id" as |government|}}
-    <GovernmentCard @government="{{government}}"></GovernmentCard>
+{{#if @governments.length}}
+  {{#each @governments as |government|}}
+    {{government}}
+    <a class="card" href="governments/government/{{@government.id}}">
+      <div class="card-container">
+        <h4><strong> {{@government.startDate}} - {{@government.endDate}}  </strong>
+          {{@government.name}} </h4>
+        <p>TODO MINISTERS</p>
+      </div>
+    </a>
   {{/each}}
 {{else}}
-  <BsAlert
-          @visible={{true}}
-          @fade={{true}}
-          @type="info"
-          @dismissible={{true}}
-  >
-    Geen vlaamse regering teruggevonden.
-  </BsAlert>
+  <div class="card warn" >
+    <div class="card-container">
+      <p> Geen vlaamse regering teruggevonden.</p>
+    </div>
+  </div>
 {{/if}}
 
 

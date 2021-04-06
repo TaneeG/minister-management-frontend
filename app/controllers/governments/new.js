@@ -1,4 +1,7 @@
 import Controller from '@ember/controller';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class GovernmentsNewController extends Controller {
   @service listing;
@@ -14,16 +17,20 @@ export default class GovernmentsNewController extends Controller {
   }
   @action
   updateStartDate(event) {
-    this.name = event.target.value;
+    this.startDate = event.target.value;
   }
   @action
   updateEndDate(event) {
-    this.name = event.target.value;
+    this.endDate = event.target.value;
   }
 
   @action
   async save() {
-    await this.listing.create('gov', { name: this.name , startDate: this.startDate, endDate:this.endDate });
+    await this.listing.create('gov', {
+      name: this.name,
+      startDate: this.startDate,
+      endDate: this.endDate,
+    });
     this.router.transitionTo('governments');
   }
 

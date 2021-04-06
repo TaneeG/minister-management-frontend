@@ -1,4 +1,4 @@
-import Model, { hasMany } from '@ember-data/model';
+import Model, { hasMany, attr } from '@ember-data/model';
 
 export default class GovernmentModel extends Model {
   @attr('string') name;

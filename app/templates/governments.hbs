@@ -1,7 +1,17 @@
 {{page-title "Governments"}}
+<div class="row">
+  <div class="col-6">
+    <GovernmentList @governments="{{@model}}"></GovernmentList>
+  </div>
+  <div class="col-6">
+    <div class="row">
+      <LinkTo @route="governments.new" class="btn btn-primary mt-2" role="button">
+        Regering toevoegen
+      </LinkTo>
+    </div>
+    <div class="row">
+      {{outlet}}
+    </div>
+  </div>
+</div>
 
-<LinkTo @route="governments.new">
-  Add Government
-</LinkTo>
-<GovernmentList></GovernmentList>
-{{outlet}}

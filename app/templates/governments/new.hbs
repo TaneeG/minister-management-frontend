@@ -1,15 +1,34 @@
-<input type="text" placeholder="Naam" value={{this.name}}
-  {{on "input" this.updateName}}
-/>
-<input type="date" placeholder="Start regering" value={{this.startDate}}
-  {{on "input" this.updateStartDate}}
-/>
-<input type="date" placeholder="Einde regering" value={{this.endDate}}
-  {{on "input" this.updateEndDate}}
-/>
-<button type="button"{{on "click" this.save}}>
-  Opslaan
-</button>
-<button type="button"{{on "click" this.cancel}}>
-  Annuleer
-</button>
+<form class="mt-5">
+  <div class="row">
+    <div class="col-6">
+      <input type="text" placeholder="Naam" value={{this.name}}
+        {{on "input" this.updateName}}
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <input type="date" placeholder="Start regering" value={{this.startDate}}
+        {{on "input" this.updateStartDate}}
+      />
+    </div>
+    <div class="col-6">
+      <input type="date" placeholder="Einde regering" value={{this.endDate}}
+        {{on "input" this.updateEndDate}}
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <button type="button" class="btn btn-success" {{on "click" this.save}}>
+        Opslaan
+      </button>
+
+    </div>
+    <div class="col-6">
+      <button type="button" class="btn btn-secondary"{{on "click" this.cancel}}>
+        Annuleer
+      </button>
+    </div>
+  </div>
+</form>
